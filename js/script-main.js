@@ -87,8 +87,8 @@
 	});
 	//var bounds = new google.maps.LatLngBounds();
 	var placesService = new google.maps.places.PlacesService(map);
-	//
-	var streetView= new google.maps.StreetViewService();
+	//This will get the panorama based on the closest location to the marker
+	// it just need where to point the camara - heading and pitch
 
 	//StreetViewService.getPanoramaByLocation(marker.position, 50, )
 
@@ -110,7 +110,7 @@
 
 	marker.addListener("click", function(){
 		console.log(this)
-			infoWindow.setContent("<div>" + this.title +"</div>" + "<div id='pano'>" + +"</div>")
+			//infoWindow.setContent("<div>" + this.title +"</div>" + "<div id='pano'>" + +"</div>")
 			this.setAnimation(google.maps.Animation.DROP);
 
 		openInfoWindow(this)
@@ -122,20 +122,47 @@
 		console.log(markers)
 		console.log(infoWindow.content)
 
-		infoWindow.open(map, marker)
-		 panorama = new google.maps.StreetViewPanorama(
-      document.getElementById('pano'),
-      {
-        position: {lat: 37.773972, lng: -122.431297},
-        //pov: {heading: 165, pitch: 0},
-        zoom: 1
-      });
-	var bla = panorama.getPano();
-	//infoWindow.setContent(bla)
-	console.log(bla)
+		//infoWindow.open(map, marker)
+
+		var streetView= new google.maps.StreetViewService();
+		var radius = 50;
+
+		function getStreetView(data, status){
+
+			console.log(data)
+			var nearStreetView = data.location.latLng;
+				console.log(nearStreetView)
+			  var heading = google.maps.geometry.spherical.computeHeading(
+                nearStreetView, marker.position);
+                infoWindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+
+          	var panoramaOptions = {
+          		position : nearStreetView,
+          		pov:{
+          			heading: heading,
+          			pitch : 30,
+
+          		}
+          		//visible: true
+          	}
+          	 var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'));
+          	 console.log(panorama)
+			if(status === "OK" && data.location.pano != null  ){
+				console.log("uju")
+
+				console.log(data.location.pano)
+
+			}
+
+		}
+
+		streetView.getPanoramaByLocation(marker.position, radius, getStreetView)
+			infoWindow.open(map,marker)
+	};
 
 
-	}
+
 
 
 

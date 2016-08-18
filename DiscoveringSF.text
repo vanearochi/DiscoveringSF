@@ -11,4 +11,11 @@ Use firebase, knockout, gulp
 2- Create html, javascript and css files.
 3- Create gulp project
 4- Add google map to html y JS
-5-
+5- Add markers
+	5.1-Add animation
+6- Add infowindows
+7- Check which markers are outside land
+8- Add StreetView
+Can I do geolocation to get the latlang automatically and create the object locations with just an array of places?
+
+// <script type="text/javascript" src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY"></script>
