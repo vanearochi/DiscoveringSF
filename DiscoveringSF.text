@@ -1,0 +1,14 @@
+Discovering SF
+A site for locals created to discover little gems, curious places and different districs
+The site will have a list in the left side
+the map will ocupy the entire webpage
+create markers for each place, this markers should contain relevant info about the place, pics and yelp or tripadvisor review
+When selecting a marker from the map or list this should display an info window
+when searching, autocomplete and hide the ones that dont match with the search
+Use firebase, knockout, gulp
+
+1- Create project folder.
+2- Create html, javascript and css files.
+3- Create gulp project
+4- Add google map to html y JS
+5-
