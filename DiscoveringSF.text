@@ -15,7 +15,9 @@ Use firebase, knockout, gulp
 	5.1-Add animation
 6- Add infowindows
 7- Check which markers are outside land
-8- Add StreetView
+8- Add places library and take the information for each place (reviews, raitings photos)
+9- Add autocomplete with google  library
+-- When the search box is added, hide markers (hideMarkers()--->createMarker for the selection)
 Can I do geolocation to get the latlang automatically and create the object locations with just an array of places?
 
 // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY"></script>

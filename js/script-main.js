@@ -2,6 +2,20 @@
 
 //$(document).ready(function(){
 
+function a(){
+
+function bla(json){
+	console.log(json)
+
+}
+
+$.ajax({
+	url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=37.7197001, -122.5024269",
+	success: bla
+})
+}
+//a()
+
 
 	var map;
 	var markers = [];
@@ -103,66 +117,49 @@
 			position: placeLocation,
 			title: name,
 			//animation : google.maps.Animation.DROP,
-			id: i
+			//id: i
 		})
 
 	markers.push(marker);
 
 	marker.addListener("click", function(){
-		console.log(this)
-			//infoWindow.setContent("<div>" + this.title +"</div>" + "<div id='pano'>" + +"</div>")
+		//console.log(this.id)
+			infoWindow.setContent("<div>" + this.title +"</div>" + "<div id='pano' style='height:100px; width: 100px'></div>")
 			this.setAnimation(google.maps.Animation.DROP);
 
 		openInfoWindow(this)
-
+		console.log(this)
+		getPlacesInfo(this)
 	})
 
-	function openInfoWindow(marker){
+	function openInfoWindow(clickedMarker){
 		console.log(i)
 		console.log(markers)
 		console.log(infoWindow.content)
 
-		//infoWindow.open(map, marker)
+		 infoWindow.open(map, clickedMarker)
 
-		var streetView= new google.maps.StreetViewService();
-		var radius = 50;
 
-		function getStreetView(data, status){
+	}
 
-			console.log(data)
-			var nearStreetView = data.location.latLng;
-				console.log(nearStreetView)
-			  var heading = google.maps.geometry.spherical.computeHeading(
-                nearStreetView, marker.position);
-                infoWindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
-
-          	var panoramaOptions = {
-          		position : nearStreetView,
-          		pov:{
-          			heading: heading,
-          			pitch : 30,
-
-          		}
-          		//visible: true
-          	}
-          	 var panorama = new google.maps.StreetViewPanorama(
-                document.getElementById('pano'));
-          	 console.log(panorama)
-			if(status === "OK" && data.location.pano != null  ){
-				console.log("uju")
-
-				console.log(data.location.pano)
-
-			}
-
-		}
-
-		streetView.getPanoramaByLocation(marker.position, radius, getStreetView)
-			infoWindow.open(map,marker)
+		//streetView.getPanoramaByLocation(marker.position, radius, getStreetView)
+			////infoWindow.open(map,marker)
 	};
 
 
 
+	function getPlacesInfo(marker){
+
+		var placeServices = new google.maps.places.PlacesService(map);
+		console.log(marker.id)
+		request ={
+			query: 'golden gate park'
+		}
+		placeServices.textSearch(request, function(place, status){
+				console.log(place)
+			})
+
+	}
 
 
 
@@ -170,6 +167,6 @@
 
 
 		//console.log(position)
-	}
+
 //});
 
