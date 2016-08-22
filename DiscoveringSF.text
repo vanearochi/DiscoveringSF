@@ -1,3 +1,5 @@
+google id = AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY
+
 Discovering SF
 A site for locals created to discover little gems, curious places and different districs
 The site will have a list in the left side
@@ -13,11 +15,19 @@ Use firebase, knockout, gulp
 4- Add google map to html y JS
 5- Add markers
 	5.1-Add animation
-6- Add infowindows
-7- Check which markers are outside land
+6- Add infowindow
+7.1 Get the place ID
 8- Add places library and take the information for each place (reviews, raitings photos)
 9- Add autocomplete with google  library
 -- When the search box is added, hide markers (hideMarkers()--->createMarker for the selection)
 Can I do geolocation to get the latlang automatically and create the object locations with just an array of places?
 
 // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY"></script>
+
+New Plan:
+
+1- create an Array of places
+2- iterate over it and search for the place
+3- Get details:
+	3.1 create marker with address or latlng
+	3.2 create info window and add content: photo, address, reviews and raitings
