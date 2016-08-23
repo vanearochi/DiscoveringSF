@@ -13,6 +13,7 @@
           zoom: 10
         });
 
+
 	var placesName = ['Lake Merced', 'Alta Plaza Park', 'Mount Sutro Forest','Corona Heights Park', 'Kite Hill Open Space','Tank Hill',
 		'San Francisco Maritime National Historical Park','Billy Goat Hill','Transamerica Redwood Park',"Levi's Plaza",'Pioneer Park',
 		'Buena Vista Park', 'Seward Mini Park', 'Fort Baker', 'Vista Point', 'Yerba Buena Island', '1111 minna gallery','Mount Davidson Park',
@@ -107,7 +108,12 @@
         			map: map,
         			position: data[0].geometry.location
       			});
-				console.log(data)
+      			var location = data[0].geometry.location;
+      			var name= data[0].name;
+				markers.push({title: name, mark: marker, loc:location})
+				console.log(markers)
+				var wikiInfo = getWikiInfo(name)
+
 			google.maps.event.addListener(marker, 'click', function() {
 				var htmlInfoWindow = "<div>"+data[0].name +" </div><div>"+data[0].formatted_address+"</div><div>"
 				+"<div>Rating: "+data[0].rating+"</div>"
@@ -151,9 +157,37 @@
 	// 		//id: i
 	// 	})
 
+	var directionsService = new google.maps.DirectionsService();
+	var haight = new google.maps.LatLng(37.7699298, -122.4469157);
+var oceanBeach = new google.maps.LatLng(37.7683909618184, -122.51089453697205);
+ directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsDisplay.setMap(map);
+   directionsDisplay.setPanel(document.getElementById("directionsPanel"))
 
-			function a(){
+  function calcRoute() {
+  //var selectedMode = TRANSIT;
+  //console.log(selectedMode)
+  var request = {
+      origin: haight,
+      destination: oceanBeach,
+      // Note that Javascript allows us to access the constant
+      // using square brackets and a string value as its
+      // "property."
+      travelMode: google.maps.TravelMode["TRANSIT"]
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+      console.log("si")
+    }
+  });
 
+}
+
+calcRoute()
+
+	function getWikiInfo(namePlace){
+		console.log(namePlace)
 	function bla(json){
 		console.log(json)
 
@@ -162,7 +196,8 @@
 	var urls = ""
 	$.ajax({
 		type: "get",
-		url:"http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH&key=MW9S-E7SL-26DU-VV8V",
+		url:"https://www.wikipedia.org/w/api.php?action=query&list=search&srsearch=lake+merced&format=json&callback=wikiCallback",
+		dataType: "jsonp",
 		success: bla,
 		//oauth_consumer_key: "9XjVJ6alaA66cyywOsZWfEDqWYI",
 		//oauth_token: "MlWg54p_LSnlHc6f4VdCGfzuuYvQan1U",
@@ -172,7 +207,7 @@
 		//oauth_nonce: ""
 	})
 	}
-	a()
+	///a()
 
 
 	// for(var i = 0; i < locations.length; i++){
