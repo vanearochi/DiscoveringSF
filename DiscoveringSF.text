@@ -20,7 +20,7 @@ Use firebase, knockout, gulp
 8- Add places library and take the information for each place (reviews, raitings photos)
 9- Add autocomplete with google  library
 -- When the search box is added, hide markers (hideMarkers()--->createMarker for the selection)
-Can I do geolocation to get the latlang automatically and create the object locations with just an array of places?
+//Can I do geolocation to get the latlang automatically and create the object locations with just an array of places?
 
 // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY"></script>
 
@@ -31,3 +31,7 @@ New Plan:
 3- Get details:
 	3.1 create marker with address or latlng
 	3.2 create info window and add content: photo, address, reviews and raitings
+
+Perhaps being able to filter accordingly to google types
+search wiki photos to apply
+When clicking outside the marker close infowindow
