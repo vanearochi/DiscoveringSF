@@ -6,26 +6,35 @@
 
 
 	var map;
-	var placesInfo= ko.observableArray();
+	var placesInfo= [];
 
 	var placesName = ['Museum of Modern Art', 'San Francisco Maritime National Historical Park', 'Mount Davidson Park','Cartoon Art Museum', 'Chinese Historical Society of America Museum',
 		'Tank Hill','San Francisco Public Library','Ocean Beach','San Francisco Symphony','Fort Point'];
-
+//ko.applyBindings(myViewModel);
 
 	var place = function(placeName, address, marker){
 
-		this.name = ko.observable(placeName)
-		this.address = ko.observable(address)
-		this.marker = ko.observable(marker)
+		console.log(placesInfo)
 
-
-		//placesInfo.push( ko.observable({name:placeName, add: address, mark: marker}))
-		console.log(this.place())
 	}
 
+place()
+//console.log()
+
+	function createPlacesData(name, address, marker){
+		this.placeName = name,
+		this.placeAddress = address,
+		this.placeMarker = marker
+
+		this.fullPlaceInfo = ko.observable
+		//placesInfo.push({placeName: name, placeAddress: address, placeMarker: marker})
+		//console.log(placesInfo)
 
 
+	}
 
+	myViewModel
+//createPlacesData()
 
 
 	function initMap(){
@@ -129,7 +138,7 @@
       			var location = data[0].geometry.location;
       			var name= data[0].name;
       			var address = data[0].formatted_address;
-      			place(name, address, marker)
+      			createPlacesData(name, address, marker)
 				getWikiInfo(name)
 				var a;
 
@@ -228,14 +237,10 @@
 	//console.log(markers)
 //$(document).ready(function(){
 	///console.log(markers)
-console.log(placesInfo)
-var myViewModel = {
-    personName: "",
-    personAge: 123
-	};
+
 
 	//console.log(markers)
-	ko.applyBindings(myViewModel);
+	//ko.applyBindings(myViewModel);
 
 
 
