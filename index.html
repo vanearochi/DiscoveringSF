@@ -1,5 +1,7 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
   	 <style>
         html,
         body {
@@ -18,9 +20,9 @@
 
   </head>
     <body>
-      <div id="map" style="float:right;width:70%; height:100%"></div><div id="mode">bla1</div>
-      <div id="informationPanel" data-bind="foreach:placesName " style="float:left;width:30%;height 100%">
-        <div>The name is <span data-bind="text: $index"></span></div>
+      <div id="map" style="float:right;width:70%; height:100% " ></div><div id="mode">bla1</div>
+      <div id="informationPanel" data-bind="foreach: placesInfo" style="float:left;width:30%;height 100%">
+        <div><h3 data-bind="text: placeName, click: $parent.bla"></h3><span data-bind="text: placeAddress"></span></div>
 
       </div>
 

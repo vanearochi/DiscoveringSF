@@ -6,35 +6,10 @@
 
 
 	var map;
-	var placesInfo= [];
+	var placesInfo= ko.observableArray();
 
 	var placesName = ['Museum of Modern Art', 'San Francisco Maritime National Historical Park', 'Mount Davidson Park','Cartoon Art Museum', 'Chinese Historical Society of America Museum',
 		'Tank Hill','San Francisco Public Library','Ocean Beach','San Francisco Symphony','Fort Point'];
-//ko.applyBindings(myViewModel);
-
-	var place = function(placeName, address, marker){
-
-		console.log(placesInfo)
-
-	}
-
-place()
-//console.log()
-
-	function createPlacesData(name, address, marker){
-		this.placeName = name,
-		this.placeAddress = address,
-		this.placeMarker = marker
-
-		this.fullPlaceInfo = ko.observable
-		//placesInfo.push({placeName: name, placeAddress: address, placeMarker: marker})
-		//console.log(placesInfo)
-
-
-	}
-
-	myViewModel
-//createPlacesData()
 
 
 	function initMap(){
@@ -44,71 +19,7 @@ place()
           zoom: 10
         });
 
-
-
-		// 'Buena Vista Park', 'Seward Mini Park', 'Fort Baker', 'Vista Point', 'Yerba Buena Island', '1111 minna gallery',,
-		// 'Diego Rivera Theatre', 'Anchor Brewing Company', 'Camera Obscura', 'Autodesk Gallery',
-		// 'Lafayette Park','San Francisco Armory', 'Cellarmaker Brewing Co.', 'Martin Luther King, Jr. Memorial', ,'GLBT History Museum',
-		// 'Sutro Heights Park','Bernal Heights Park','Old Cathedral of St. Mary','SFJazz Center','Grand View Park','Clarion Alley Murals','China Beach',
-		// 'Stow Lake Boathouse','San Francisco Ballet',"SS Jeremiah O'Brien",
-		// 'USS Pampanito','16th Avenue Tiled Steps','Japanese Tea Garden','Angel Island','Golden Gate Promenade','Baker Beach','Asian Art Museum',
-		// 'Walt Disney Family Museum','Twin Peaks','USS San Francisco Memorial','San Francisco Botanical Garden','Grace Cathedral','Lands End',
-		// 'San Francisco City Hall','Palace of Fine Arts','Cliff House','Coit Tower','Sutro Baths',
-		// 'Crissy Field','Presidio','de Young Museum','Legion of Honor'
-	// var infoWindow = new google.maps.InfoWindow({
-	// 	//content: "infowindow LKAHDJKSJADLKJLSDJLD"
-	// 	minWidth: 200
-	// });
-	// //var bounds = new google.maps.LatLngBounds();
 		var placesService = new google.maps.places.PlacesService(map);
-	//This will get the panorama based on the closest location to the marker
-	// it just need where to point the camara - heading and pitch
-
-	//StreetViewService.getPanoramaByLocation(marker.position, 50, )
-
-	//var radious = 50;
-
-	// for(var i = 0; i < locations.length; i++){
-	// 	var placeLocation =locations[i].location;
-	// 	var name = locations[i].title;
-
-	// 	var marker = new google.maps.Marker({
-	// 		map: map,
-	// 		position: placeLocation,
-	// 		title: name,
-	// 		//animation : google.maps.Animation.DROP,
-	// 		//id: i
-	// 	})
-
-	//markers.push(marker);
-
-	// marker.addListener("click", function(){
-	// 	//console.log(this.id)
-	// 		infoWindow.setContent("<div>" + this.title +"</div>" + "<div id='pano' style='height:100px; width: 100px'></div>")
-	// 		this.setAnimation(google.maps.Animation.DROP);
-
-	// 	openInfoWindow(this)
-	// 	console.log(this)
-	// 	getPlacesInfo(this)
-	// })
-
-	// function openInfoWindow(clickedMarker){
-	// 	console.log(i)
-	// 	console.log(markers)
-	// 	console.log(infoWindow.content)
-
-	// 	 infoWindow.open(map, clickedMarker)
-
-
-	// }
-
-		//streetView.getPanoramaByLocation(marker.position, radius, getStreetView)
-			////infoWindow.open(map,marker)
-	//};
-
-
-
-
 
 
 		for (var i = 0; i < placesName.length; i++) {
@@ -138,19 +49,23 @@ place()
       			var location = data[0].geometry.location;
       			var name= data[0].name;
       			var address = data[0].formatted_address;
-      			createPlacesData(name, address, marker)
+      			var rating = data[0].rating;
+
+      			//createPlacesData(name, address, marker)
+
+      			//console.log(placesInfo().length)
 				getWikiInfo(name)
-				var a;
+				var nameWithUnderscore;
 
 				function getWikiInfo(namePlace){
 
-					a = namePlace.replace(/\s/g, "_")
+					nameWithUnderscore = namePlace.replace(/\s/g, "_")
 					var wikiSnippet;
 
 					$.ajax({
 
 						type: "get",
-						url:"https://www.wikipedia.org/w/api.php?action=query&list=search&srsearch="+a+"&format=json&callback=wikiCallback",
+						url:"https://www.wikipedia.org/w/api.php?action=query&list=search&srsearch="+nameWithUnderscore+"&format=json&callback=wikiCallback",
 						dataType: "jsonp",
 						success: bla
 					})
@@ -164,25 +79,34 @@ place()
 					}
 				}
 
-				function createInfoWinText(x){
+
+				function createInfoWinText(placeSnippet){
+
+					var wikiInfo=placeSnippet;
 					//console.log(a)
 					infoWindowText = "<div>"+name +" </div><div>"+address+"</div><div>"
-					+"<div>Rating: "+data[0].rating+"</div><div>"+x+"</div><a href='https://en.wikipedia.org/wiki/"+a+"'>More info</a>";
+					+"<div>Rating: "+rating+"</div><div>"+placeSnippet+"</div><a href='https://en.wikipedia.org/wiki/"+nameWithUnderscore+"'>More info</a>";
 
+					placesInfo.push({placeName: name, placeAddress: address, placeMarker: marker, placeWikiInfo: wikiInfo, placeRating: rating})
 				}
 
 
 				google.maps.event.addListener(marker, 'click', function() {
 
-					//console.log(rr)
 
-					// var htmlInfoWindow = "<div>"+data[0].name +" </div><div>"+data[0].formatted_address+"</div><div>"
-					// +"<div>Rating: "+data[0].rating+"</div><div></div>";
 
-	        		infoWindow.setContent(infoWindowText);
+					 var htmlInfoWindow = "<div>"+data[0].name +" </div><div>"+data[0].formatted_address+"</div><div>"
+					 +"<div>Rating: "+data[0].rating+"</div><div></div>";
+
+					infoWindow.setContent(infoWindowText);
 	        		infoWindow.open(map, this);
 
 	     		});
+
+
+      			if(placesInfo().length === 10){
+      				myViewModel()
+      			}
 			}
 
 
@@ -214,6 +138,11 @@ place()
 
 			}
 
+
+
+
+
+
 		///calcRoute()
 
 //console.log(markers)
@@ -233,18 +162,70 @@ place()
 
 	}
 //console.log(markers)
+	// 	function createPlacesData(placeName, placeAddress, placeMarker){
+
+	// 	this.pName = ko.observable(placeName);
+	// 	//console.log(this.p)
+	// 	this.pAddress = ko.observable(placeAddress);
+	// 	this.pMarker = ko.observable(placeMarker);
+	// 	    // Initially an empty array
+	// 	placesInfo.push({name:this.pName, address: this.pAddres, marker: pMarker})
+
+
+	// 	console.log(placesInfo().length)
+	// 	console.log(placesInfo())
+
+	// 	//this.placeMarker = ko.observable(marker);
+
+	// 	// this.fullPlaceInfo = ko.computed(function(){
+	// 	// 	console.log(this.pName())
+	// 	// 	console.log(this.pAddress())
+
+	// 	// 	return this.pName() +" "+ this.pAddress();
+
+	// 	// }, this);
+	// 	//placesInfo.push({placeName: name, placeAddress: address, placeMarker: marker})
+	// 	//console.log(placesInfo)
+
+
+	// }
+	// 	ko.applyBindings(createPlacesData);
+	//console.log(placesInfo().length)
+
+	//google.maps.event.addListenerOnce( marker, 'tilesloaded', tt())
 	}
-	//console.log(markers)
-//$(document).ready(function(){
-	///console.log(markers)
-
-
-	//console.log(markers)
-	//ko.applyBindings(myViewModel);
 
 
 
-		//console.log(position)
+		function myViewModel(){
+			var self = this;
+			self.places = placesInfo
+			//console.log(placesInfo()[0])
 
-//});
+			self.bla = function(){
+				//placesInfo.remove(this)
+				console.log(this.placeMarker)
+				console.log(this.placeName)
+				this.placeMarker.setAnimation(google.maps.Animation.BOUNCE);
+				var nameWithUnderscore = this.placeName.replace(/\s/g, "_")
+				var infoWindowText = "<div>"+this.placeName +" </div><div>"+this.Address+"</div><div>"
+					+"<div>Rating: "+this.placeRating+"</div><div>"+this.placeWikiInfo
+					+"</div><a href='https://en.wikipedia.org/wiki/"+ nameWithUnderscore
+					+"'>More info</a>";
+
+				infoWindow.setContent(infoWindowText);
+	        		infoWindow.open(map, this.placeMarker);
+				}
+
+
+			//function showMarkerInfo(){}
+		}
+
+
+					//console.log(a)
+
+
+
+		ko.applyBindings(new myViewModel());
+
 
