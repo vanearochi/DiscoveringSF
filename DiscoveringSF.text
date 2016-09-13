@@ -35,3 +35,13 @@ New Plan:
 Perhaps being able to filter accordingly to google types
 search wiki photos to apply
 When clicking outside the marker close infowindow
+
+close directions when another one is selected
+add error management
+
+
+When erasing the input value or clicking show all change all to visible
+
+routes-> arr[0] --> legs[0] --> steps(length- itarate) --> intructions(html text)
+routes-> arr[0] --> legs[0]--> distance --> text
+routes-> arr[0] --> legs[0]--> duration --> text

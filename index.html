@@ -20,14 +20,31 @@
 
   </head>
     <body>
-      <div id="map" style="float:right;width:70%; height:100% " ></div><div id="mode">bla1</div>
-      <div id="informationPanel" data-bind="foreach: placesInfo" style="float:left;width:30%;height 100%">
-        <div><h3 data-bind="text: placeName, click: $parent.bla"></h3><span data-bind="text: placeAddress"></span></div>
+      <div id="map" style="float:right;width:70%; height:100% " ></div>
+      <div id="mode" style="float:left;width:30%;height 100%">
+      <!-- <div> --> <input type="text" data-bind=" textInput: inputValue">  </div> <p id="takeMeThere" data-bind='click:hidePlacesnMarkers'>Take me there</p>
+        <select id="travelMode">
+            <option value="DRIVING">Drive</option>
+            <option value="WALKING">Walk</option>
+            <option value="BICYCLING">Bike</option>
+            <option value="TRANSIT">Transit</option>
+        </select>
+       <!--  <span id="showAll" data-bind ="click:showAllPlaces">Show all Places </span> -->
+        <!-- <div> -->
+        <div id="informationPanel" data-bind="foreach: placesContainer">
+          <div>
+            <h4 data-bind = "text: name, click:$parent.passClickInformation"></h4>
 
+           <!--  <h3 data-bind="text: name, click: $parent.bla, visible: placeVisible "></h3>
+            <span data-bind="text: address, visible: placeVisible"></span> -->
+            <!-- <div data-bind=' attr:{id: placeName}, visible: placeDirectionsDisplay'  ></div> -->
+          </div>
+        </div>
       </div>
 
+
       <script async defer
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY&libraries=places&v=3&callback=initMap">
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY&signed_in=true&libraries=places&language=en&v=3&callback=initMap">
           </script>
 
         <script type='text/javascript' src='js/lib/knockout-3.4.0.js'></script>
