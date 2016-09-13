@@ -2,10 +2,11 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
   	 <style>
         html,
         body {
-          font-family: Arial, sans-serif;
+          font-family: 'Dosis', sans-serif;
           height: 100%;
           margin: 0;
           padding: 0;
@@ -22,7 +23,7 @@
     <body>
       <div id="map" style="float:right;width:70%; height:100% " ></div>
       <div id="mode" style="float:left;width:30%;height 100%">
-      <!-- <div> --> <input type="text" data-bind=" textInput: inputValue">  </div> <p id="takeMeThere" data-bind='click:hidePlacesnMarkers'>Take me there</p>
+      <!-- <div> --> <!-- <input type="text" data-bind=" textInput: inputValue">  </div> <p id="takeMeThere" data-bind='click:hidePlacesnMarkers'>Take me there</p> -->
         <select id="travelMode">
             <option value="DRIVING">Drive</option>
             <option value="WALKING">Walk</option>
@@ -31,14 +32,20 @@
         </select>
        <!--  <span id="showAll" data-bind ="click:showAllPlaces">Show all Places </span> -->
         <!-- <div> -->
-        <div id="informationPanel" data-bind="foreach: placesContainer">
-          <div>
-            <h4 data-bind = "text: name, click:$parent.passClickInformation"></h4>
+
+         <div data-bind = "foreach:placesContainer">
+
+          <h2 data-bind="text:label"><h1 data-bind = "text: name, click:$parent.passClickInformation"></h1></h2>
 
            <!--  <h3 data-bind="text: name, click: $parent.bla, visible: placeVisible "></h3>
             <span data-bind="text: address, visible: placeVisible"></span> -->
             <!-- <div data-bind=' attr:{id: placeName}, visible: placeDirectionsDisplay'  ></div> -->
           </div>
+
+        </div>
+        <div>
+          <h1>hola</h1>
+          <div>bla bla</div>
         </div>
       </div>
 

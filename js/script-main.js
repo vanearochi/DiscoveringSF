@@ -2,32 +2,34 @@
 var map;
 var placesList = [ 'Golden Gate Bridge', 'Angel Island', 'Golden Gate Park', 'Fort Point', 'Mount Davidson', 'Ferry Building', 'Coit Tower', 'Mission District', 'Castro Theatre', 'Alcatraz'];
 var placesContainer= [
-					{name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}},
-					{name:'Angel Island', location: {lat: 37.860909, lng: -122.43256819999999}},
-					{name:"Golden Gate Park", location: {lat: 37.7694208, lng: -122.48621379999997}},
-					{name:"Fort Point", location: {lat: 37.8105931, lng: -122.4771093}},
-					{name:"Mount Davidson", location: {lat: 37.73833330000001, lng: -122.4533333}},
-					{name:"San Francisco Ferry Building", location: {lat: 37.7955469, lng: -122.39341769999999}},
-					{name: "Coit Tower", location:{lat: 37.8023949, lng: -122.40582219999999}},
-					{name: "Mission District", location:{lat: 37.7598648, lng: -122.41479770000001}},
-					{name:"The Castro Theatre", location:{lat: 37.761992, lng: -122.43473590000002}},
-					{name:"Alcatraz Island", location:{lat: 37.8269775, lng: -122.4229555}}
-				]
+					{label: "A", name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}},
+					{label:"B", name:'Angel Island', location: {lat: 37.860909, lng: -122.43256819999999}},
+					{label:"C", name:"Golden Gate Park", location: {lat: 37.7694208, lng: -122.48621379999997}},
+					{label:"D", name:"Fort Point", location: {lat: 37.8105931, lng: -122.4771093}},
+					{label:"E", name:"Mount Davidson", location: {lat: 37.73833330000001, lng: -122.4533333}},
+					{label:"F",name:"San Francisco Ferry Building", location: {lat: 37.7955469, lng: -122.39341769999999}},
+					{label:"G",name: "Coit Tower", location:{lat: 37.8023949, lng: -122.40582219999999}},
+					{label:"H",name: "Mission District", location:{lat: 37.7598648, lng: -122.41479770000001}},
+					{label:"I",name:"The Castro Theatre", location:{lat: 37.761992, lng: -122.43473590000002}},
+					{label:"J",name:"Alcatraz Island", location:{lat: 37.8269775, lng: -122.4229555}}
+				];
+
 var markerSelected;
+var labelContainer = ko.observable(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"])
 
 var passTheInfo;
 
 
 
-//
+
 
 function initMap(){
 
 	//Creating map
 	map = new google.maps.Map(document.getElementById('map'), {
 
-    	center: { lat: 37.773972, lng: -122.431297},
-    	zoom: 10
+    	center: { lat: 37.82, lng: -122.431297},
+    	zoom: 12
 
     });
 
@@ -37,14 +39,16 @@ function initMap(){
 
 		var name = placesContainer[i].name;
 		var position = placesContainer[i].location;
-		createMarker(name, position, placesContainer[i])
+		createMarker(placesContainer[i])
 	}
 
 
-	var counter = 0
-	function createMarker(name, position, place){
+
+	function createMarker(place){
 
 
+			var label = place.label;
+			var title = place.name;
 
 			// var latLng = data[0].geometry.location.toJSON();
 			// var placeName = data[0].name;
@@ -61,24 +65,33 @@ function initMap(){
 					fillColor: '#FF1010',
 					fillOpacity: 0.7,
 					strokeWeight: 3,
-					scale: 0.4
+					scale: 0.75,
+					labelOrigin:  new google.maps.Point(0, -25)
 					},
-	    		title: name,
-	    		id: counter
+	    		title: title,
+	    		id: i,
+	    		label: {
+	    			text: label,
+	    			fontSize: "18px"
+	    		}
+	    		//http://stackoverflow.com/questions/34251143/how-to-show-label-on-custom-icon-image-in-google-map-api
+
 
 	  		});
 			infoWindow =  new google.maps.InfoWindow();
 	  		google.maps.event.addListener(marker, 'click', passTheInfo)
 
 	  		place.marker = marker;
+	  		//place.pLabel = label;
+	  		console.log(place)
 
-
-	  		counter += 1
+	  		//counter = counter + 1
 
 
 
 
 	}
+
 
 	openInfoWindow = function(marker, address, wikiInfo){
 
@@ -102,6 +115,7 @@ function initMap(){
 	}
 
 	askInfoToPlacesLibrary = function(marker){
+		console.log(marker.title)
 		var name = marker.title
 		var placeServices = new google.maps.places.PlacesService(map);
 		placeServices.textSearch({query: name}, placeInformation)
@@ -169,12 +183,14 @@ function initMap(){
 	}
 
 	function passTheInfo(){
-
+		markerSelected = this;
+		console.log(this)
 
 		//console.log("click sucess")
 		//console.log(this.title)
-		var name = this.title
-		askInfoToPlacesLibrary(this)
+		//var name = this.title
+		//askInfoToPlacesLibrary(this)
+		console.log(markerSelected)
 
 
 
@@ -222,8 +238,15 @@ function giveWikiInfo(name){
 
 function myViewModel(){
 
+
 	var self = this
 	self.inputValue = ko.observable("");
+
+
+
+	self.trial = function(){
+		console.log("click sucess from maps")
+	}
 
 	self.passClickInformation = function(){
 
@@ -231,8 +254,19 @@ function myViewModel(){
 		console.log(this)
 		var name
 		//passTheInfo(this.name())
+		console.log(markerSelected)
+
 		askInfoToPlacesLibrary(this.marker)
+		self.hideAndShowTitle(this.marker)
 	}
+
+	self.hideAndShowTitle = function(){
+
+		console.log("sucess call function hideAndShowTitle")
+
+	}
+
+
 
 	self.inputValue.subscribe(function(newValue) {
 
@@ -278,6 +312,8 @@ function myViewModel(){
 
 
 ko.applyBindings(new myViewModel());
+
+//when clicking a name or marker zoom on this marker and hide other ones, show title hide other ones, show dom with placeinfo
 
  //var name = "Balboa Park"
 //askInfoToPlacesLibrary(name)
