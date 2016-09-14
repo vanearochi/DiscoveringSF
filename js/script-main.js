@@ -24,7 +24,7 @@ var passTheInfo;
 var koAddress = ko.observable("");
 
 
-
+//add a branch to make do the vegan app and search api and location in places
 
 
 function initMap(){
@@ -235,19 +235,24 @@ function initMap(){
 				place.marker.setVisible(false)
 			}
 			//placesContainer[i]
-	};
+		};
+	}
 
 	showAllMarkers = function(){
 
 		map.setZoom(12)
 		map.setCenter({ lat: 37.82, lng: -122.431297})
 		for (var i = 0; i < placesContainer().length; i++) {
-			var place = placesContainer[i]
+			var place = placesContainer()[i]
 			place.marker.setVisible(true)
 		}
-	}
+	};
 
-	}
+
+	hideOrShowMarker = function(place, boolean){
+
+		place.marker.setVisible(boolean)
+	};
 
 
 
@@ -282,8 +287,12 @@ function myViewModel(){
 
 	var self = this
 	self.addressVisible = ko.observable(false)
-	self.placeAddress = ko.observable("");
+	self.infoVisible = ko.observable(false);
 	self.inputValue = ko.observable("");
+	self.placeAddress = ko.observable("");
+	self.wikiInfo = ko.observable("yay")
+	self.url = ko.observable("")
+	self.goToWikiPage = ko.observable("More Info")
 	//self.addressVisible = ko.observable(false)
 	//console.log(markerSelected)
 	self.giveWikiInfo = function(name){
@@ -317,6 +326,7 @@ function myViewModel(){
 		askInfoToPlacesLibrary(this.marker)
 		self.hideTitles(this.marker)
 		markerSelected(this.marker)
+		self.showWikiInfo(this.marker)
 	}
 
 	self.hideTitles = function(marker){
@@ -336,6 +346,7 @@ function myViewModel(){
 		//console.log("sucess on click show All")
 		showAllMarkers()
 
+
 		for (var i = 0; i < placesContainer().length; i++) {
 
 			placesContainer()[i].titleVisible(true)
@@ -351,15 +362,18 @@ function myViewModel(){
 		for(var i = 0; i < placesContainer().length; i++){
 			var place = placesContainer()[i]
 			var regex = /[a-z]/
+			//hideOrShowMarker(true, true)
 			//console.log(self.inputValue().length)
 			if(self.inputValue().length > 0 && self.inputValue().search(regex)>=0){
-				if(place.name().toLowerCase().includes(self.inputValue().toLowerCase()) === true){
+				if(place.name.toLowerCase().includes(self.inputValue().toLowerCase()) === true){
 
 					//console.log(place.name())
 					//self.setParameters(place, true, map)
-					place.showNameOnList(true)
-					setMarkerVisibility(place, map)
-					setDirectionsVisibility(null)
+					place.titleVisible(true)
+					//hideMarkers(place.marker)
+					hideOrShowMarker(place, true)
+					//setMarkerVisibility(place, map)
+					//setDirectionsVisibility(null)
 					//directionsDisplay.setMap(null);
 
 				}
@@ -367,8 +381,9 @@ function myViewModel(){
 				else{
 
 					//self.setParameters(place, false, null)
-					place.showNameOnList(false)
-					setMarkerVisibility(place, null)
+					place.titleVisible(false)
+					hideOrShowMarker(place, false)
+					//setMarkerVisibility(place, null)
 
 				}
 			}
@@ -376,8 +391,9 @@ function myViewModel(){
 				//selectedLocation.placeDirections(null)
 				//self.setParameters(place, true, map)
 				//self.showAllPlaces()
-					place.showNameOnList(true)
-					setMarkerVisibility(place, map)
+					place.titleVisible(true)
+					hideOrShowMarker(place, true)
+					//setMarkerVisibility(place, map)
 
 			}
 		}
@@ -385,12 +401,28 @@ function myViewModel(){
 
 	koAddress.subscribe(function(address){
 		//console.log(address)
-		self.addressVisible(true)
+		self.infoVisible(true)
 		self.placeAddress(address);
 
 
 
 	})
+
+	self.showWikiInfo = function(marker){
+		wikiPromise = self.giveWikiInfo(marker.title)
+	    wikiPromise.then(function(data){
+	    		var wikiPlaceInfo = data.query.search[0].snippet
+	    		//console.log(marker.title)
+	    		//openInfoWindow(marker, address, wikiPlaceInfo)
+	    		self.wikiInfo(wikiPlaceInfo)
+	    		var wikiUrl = 'https://en.wikipedia.org/wiki/'+marker.title;
+	    		console.log(wikiUrl)
+	    		self.url(wikiUrl)
+
+	})
+
+
+	}
 
 
 

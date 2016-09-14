@@ -23,7 +23,7 @@
     <body>
       <div id="map" style="float:right;width:70%; height:100% " ></div>
       <div id="mode" style="float:left;width:30%;height 100%">
-      <!-- <div> --> <!-- <input type="text" data-bind=" textInput: inputValue">  </div> <p id="takeMeThere" data-bind='click:hidePlacesnMarkers'>Take me there</p> -->
+      <div>  <input type="text" data-bind=" textInput: inputValue">  </div> <p id="takeMeThere" >Take me there</p> -->
         <select id="travelMode">
             <option value="DRIVING">Drive</option>
             <option value="WALKING">Walk</option>
@@ -45,9 +45,10 @@
           </div>
 
         </div>
-        <div>
-          <div  data-bind="text:placeAddress, visible: addressVisible"></div>
-          <div data-bind="text:placeWikiInfo, visible:placeVisible"><>
+        <div data-bind ="visible:infoVisible">
+          <div  data-bind="text:placeAddress"></div>
+          <div data-bind="html:wikiInfo"></div>
+          <p> <a data-bind="attr:{href:url}">More Info</a> </p>
 
         </div>
       </div>
