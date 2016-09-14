@@ -30,12 +30,14 @@
             <option value="BICYCLING">Bike</option>
             <option value="TRANSIT">Transit</option>
         </select>
-       <!--  <span id="showAll" data-bind ="click:showAllPlaces">Show all Places </span> -->
+       <span id="showAllTitles" data-bind ="click:showAllTitles">Show all Places </span>
         <!-- <div> -->
 
          <div data-bind = "foreach:placesContainer">
+          <div data-bind ="attr:{id: name}">
+          <h2 data-bind="text:label, visible: titleVisible" ><h1 data-bind = "text: name, click:$parent.passClickInformation, visible:titleVisible"></h1></h2>
+        </div>
 
-          <h2 data-bind="text:label"><h1 data-bind = "text: name, click:$parent.passClickInformation"></h1></h2>
 
            <!--  <h3 data-bind="text: name, click: $parent.bla, visible: placeVisible "></h3>
             <span data-bind="text: address, visible: placeVisible"></span> -->
@@ -44,8 +46,9 @@
 
         </div>
         <div>
-          <h1>hola</h1>
-          <div>bla bla</div>
+          <div  data-bind="text:placeAddress, visible: addressVisible"></div>
+          <div data-bind="text:placeWikiInfo, visible:placeVisible"><>
+
         </div>
       </div>
 
@@ -55,7 +58,7 @@
           </script>
 
         <script type='text/javascript' src='js/lib/knockout-3.4.0.js'></script>
-        <script src="js/script-main.js"></script>s
+        <script src="js/script-main.js"></script>
 
   </body>
 </html>

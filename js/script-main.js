@@ -1,23 +1,27 @@
 
 var map;
 var placesList = [ 'Golden Gate Bridge', 'Angel Island', 'Golden Gate Park', 'Fort Point', 'Mount Davidson', 'Ferry Building', 'Coit Tower', 'Mission District', 'Castro Theatre', 'Alcatraz'];
-var placesContainer= [
-					{label: "A", name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}},
-					{label:"B", name:'Angel Island', location: {lat: 37.860909, lng: -122.43256819999999}},
-					{label:"C", name:"Golden Gate Park", location: {lat: 37.7694208, lng: -122.48621379999997}},
-					{label:"D", name:"Fort Point", location: {lat: 37.8105931, lng: -122.4771093}},
-					{label:"E", name:"Mount Davidson", location: {lat: 37.73833330000001, lng: -122.4533333}},
-					{label:"F",name:"San Francisco Ferry Building", location: {lat: 37.7955469, lng: -122.39341769999999}},
-					{label:"G",name: "Coit Tower", location:{lat: 37.8023949, lng: -122.40582219999999}},
-					{label:"H",name: "Mission District", location:{lat: 37.7598648, lng: -122.41479770000001}},
-					{label:"I",name:"The Castro Theatre", location:{lat: 37.761992, lng: -122.43473590000002}},
-					{label:"J",name:"Alcatraz Island", location:{lat: 37.8269775, lng: -122.4229555}}
-				];
+var placesContainer= ko.observable([
+					{label: "A", name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}, titleVisible:ko.observable(true)},
+					{label:"B", name:'Angel Island', location: {lat: 37.860909, lng: -122.43256819999999}, titleVisible:ko.observable(true)},
+					{label:"C", name:"Golden Gate Park", location: {lat: 37.7694208, lng: -122.48621379999997}, titleVisible:ko.observable(true)},
+					{label:"D", name:"Fort Point", location: {lat: 37.8105931, lng: -122.4771093}, titleVisible:ko.observable(true)},
+					{label:"E", name:"Mount Davidson", location: {lat: 37.73833330000001, lng: -122.4533333}, titleVisible:ko.observable(true)},
+					{label:"F",name:"San Francisco Ferry Building", location: {lat: 37.7955469, lng: -122.39341769999999}, titleVisible:ko.observable(true)},
+					{label:"G",name: "Coit Tower", location:{lat: 37.8023949, lng: -122.40582219999999}, titleVisible:ko.observable(true)},
+					{label:"H",name: "Mission District", location:{lat: 37.7598648, lng: -122.41479770000001}, titleVisible:ko.observable(true)},
+					{label:"I",name:"The Castro Theatre", location:{lat: 37.761992, lng: -122.43473590000002}, titleVisible:ko.observable(true)},
+					{label:"J",name:"Alcatraz Island", location:{lat: 37.8269775, lng: -122.4229555}, titleVisible:ko.observable(true)}
+				]);
 
-var markerSelected;
+
+
+var markerSelected=ko.observable("hola");
+//suscribe it and as soon as the value change it calls the hide titles, hide markers from pass info function
 var labelContainer = ko.observable(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"])
 
 var passTheInfo;
+var koAddress = ko.observable("");
 
 
 
@@ -35,11 +39,11 @@ function initMap(){
 
 	//Iterating over placesList to look for it in Google's places library
 	//Call createMarker
-	for (var i = 0; i < placesContainer.length; i++) {
+	for (var i = 0; i < placesContainer().length; i++) {
 
-		var name = placesContainer[i].name;
-		var position = placesContainer[i].location;
-		createMarker(placesContainer[i])
+		var name = placesContainer()[i].name;
+		var position = placesContainer()[i].location;
+		createMarker(placesContainer()[i])
 	}
 
 
@@ -73,17 +77,20 @@ function initMap(){
 	    		label: {
 	    			text: label,
 	    			fontSize: "18px"
-	    		}
+	    		},
+	    		visible: true,
+
+
+
 	    		//http://stackoverflow.com/questions/34251143/how-to-show-label-on-custom-icon-image-in-google-map-api
 
 
 	  		});
 			infoWindow =  new google.maps.InfoWindow();
 	  		google.maps.event.addListener(marker, 'click', passTheInfo)
-
 	  		place.marker = marker;
 	  		//place.pLabel = label;
-	  		console.log(place)
+	  		//console.log(place)
 
 	  		//counter = counter + 1
 
@@ -102,11 +109,11 @@ function initMap(){
 						"<div>"+ address + "</div>"+
 						"<div>"+ wikiInfo +
 						"</div><a href='https://en.wikipedia.org/wiki/"+marker.title+"'>More info</a>";
-		console.log(htmlBlock)
+		//console.log(htmlBlock)
 
 
 
-
+		getElementById
 		infoWindow.setContent(htmlBlock);
 		infoWindow.open(map, marker)
 
@@ -115,19 +122,32 @@ function initMap(){
 	}
 
 	askInfoToPlacesLibrary = function(marker){
-		console.log(marker.title)
+
+		console.log("success click from MV to maps")
 		var name = marker.title
 		var placeServices = new google.maps.places.PlacesService(map);
 		placeServices.textSearch({query: name}, placeInformation)
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		function placeInformation(data, status){
 			console.log(data)
+			console.log()
+			var domElementForAdress = document.getElementById(name)
+
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 
 				var placeInfo = data[0]
 				var address = placeInfo.formatted_address;
-				askWikiInfo(address, marker)
+				//console.log(domElementForAdress)
+				//console.log(address)
+
+				koAddress(address)
+
+
+				//domElementForAdress.appendChild(addressNode)
+				//askWikiInfo(address, marker)
 			}
+
+
 
 
 
@@ -171,7 +191,7 @@ function initMap(){
 		wikiPromise = giveWikiInfo(marker.title)
 	    wikiPromise.then(function(data){
 	    		var wikiPlaceInfo = data.query.search[0].snippet
-	    		console.log(marker.title)
+	    		//console.log(marker.title)
 	    		openInfoWindow(marker, address, wikiPlaceInfo)
 
 
@@ -183,16 +203,49 @@ function initMap(){
 	}
 
 	function passTheInfo(){
-		markerSelected = this;
-		console.log(this)
+		markerSelected(this);
+		//console.log(markerSelected())
+		hideMarkers(this)
+		//console.log(this)
 
 		//console.log("click sucess")
 		//console.log(this.title)
 		//var name = this.title
 		//askInfoToPlacesLibrary(this)
-		console.log(markerSelected)
+		//console.log(markerSelected)
 
 
+
+	}
+
+	hideMarkers = function(marker){
+
+		map.setZoom(15)
+		//console.log(marker.position)
+		map.setCenter(marker.position)
+
+
+
+
+		for (var i = 0; i < placesContainer().length; i++) {
+			var place = placesContainer()[i];
+			//console.log(placesContainer()[i].marker)
+			if(place.marker != marker){
+				//console.log("sucess call showhide markers")
+				place.marker.setVisible(false)
+			}
+			//placesContainer[i]
+	};
+
+	showAllMarkers = function(){
+
+		map.setZoom(12)
+		map.setCenter({ lat: 37.82, lng: -122.431297})
+		for (var i = 0; i < placesContainer().length; i++) {
+			var place = placesContainer[i]
+			place.marker.setVisible(true)
+		}
+	}
 
 	}
 
@@ -222,7 +275,18 @@ function initMap(){
 
 }
 
-function giveWikiInfo(name){
+
+
+function myViewModel(){
+
+
+	var self = this
+	self.addressVisible = ko.observable(false)
+	self.placeAddress = ko.observable("");
+	self.inputValue = ko.observable("");
+	//self.addressVisible = ko.observable(false)
+	//console.log(markerSelected)
+	self.giveWikiInfo = function(name){
 
 	nameWithUnderscore = name.replace(/\s/g, "_")
 
@@ -236,38 +300,52 @@ function giveWikiInfo(name){
 	return wikiPromise
 }
 
-function myViewModel(){
-
-
-	var self = this
-	self.inputValue = ko.observable("");
-
 
 
 	self.trial = function(){
-		console.log("click sucess from maps")
+		//console.log("click sucess from maps")
 	}
 
 	self.passClickInformation = function(){
 
-		console.log("sucess open info")
-		console.log(this)
+		//console.log("sucess open info")
+		//console.log(this)
 		var name
 		//passTheInfo(this.name())
-		console.log(markerSelected)
+		//console.log(markerSelected)
 
 		askInfoToPlacesLibrary(this.marker)
-		self.hideAndShowTitle(this.marker)
+		self.hideTitles(this.marker)
+		markerSelected(this.marker)
 	}
 
-	self.hideAndShowTitle = function(){
+	self.hideTitles = function(marker){
 
-		console.log("sucess call function hideAndShowTitle")
+		hideMarkers(marker)
 
+		for (var i = 0; i < placesContainer().length; i++) {
+
+			if(placesContainer()[i].marker!=marker){
+				placesContainer()[i].titleVisible(false)
+				//console.log(placesContainer()[i].titleVisible(false))
+			}
+		};
+	}
+
+	self.showAllTitles = function(){
+		//console.log("sucess on click show All")
+		showAllMarkers()
+
+		for (var i = 0; i < placesContainer().length; i++) {
+
+			placesContainer()[i].titleVisible(true)
+		}
 	}
 
 
-
+	markerSelected.subscribe(function(marker){
+		self.hideTitles(marker)
+	})
 	self.inputValue.subscribe(function(newValue) {
 
 		for(var i = 0; i < placesContainer().length; i++){
@@ -304,6 +382,15 @@ function myViewModel(){
 			}
 		}
 	});
+
+	koAddress.subscribe(function(address){
+		//console.log(address)
+		self.addressVisible(true)
+		self.placeAddress(address);
+
+
+
+	})
 
 
 
