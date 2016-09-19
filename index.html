@@ -2,11 +2,11 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
-        <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Pavanam" rel="stylesheet">
   	 <style>
         html,
         body {
-          font-family: 'Dosis', sans-serif;
+          font-family: 'Pavanam', monospace;
           height: 100%;
           margin: 0;
           padding: 0;
@@ -15,9 +15,30 @@
         #map {
           height: 100%;
         }
-        .adp-step, .adp-substep, .adp, .adp-text, .adp-summary, .warnbox-content{
-        font-weight: bold
+        .adp-step, .adp-substep, .adp, .adp-text, .adp-summary, .warnbox-content, .adp-agencies{
+        font-weight: normal;
         }
+        .container{
+          margin: 1em;
+        }
+        .placesContainer{
+          font-size: 1.5em;
+        }
+        .placeNameContainer{
+          margin: 0.8em;
+
+        }
+        #showAllTitles{
+          font-size: 1.3em;
+          text-align: right;
+        }
+        input{
+          width: 70%;
+          margin:0;
+
+
+        }
+
       </style>
   	<title>DiscoveringSF</title>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -26,46 +47,35 @@
     <body>
       <div id="map" style="float:right;width:75%; height:100% " ></div>
       <div id="mode" style="float:left;width:25%;height 100%">
-
-        <input type="text" style="margin-top:20px" data-bind=" textInput: inputValue">
-        <select id="travelMode">
-            <option value="DRIVING">Drive</option>
-            <option value="WALKING">Walk</option>
-            <option value="BICYCLING">Bike</option>
-            <option value="TRANSIT">Transit</option>
-        </select>
-       <span id="showAllTitles" data-bind ="click:showAllTitles">Show all Places </span>
-        <!-- <div> -->
-
-         <div data-bind = "foreach:placesContainer">
-          <div data-bind ="attr:{id: name}">
-          <h2><span data-bind="text:$index(), visible: titleVisible" ></span>
-          <span data-bind = "text: name, click:$parent.passClickInformation, visible:titleVisible"></span></h2>
-        </div>
-
-
-           <!--  <h3 data-bind="text: name, click: $parent.bla, visible: placeVisible "></h3>
-            <span data-bind="text: address, visible: placeVisible"></span> -->
-            <!-- <div data-bind=' attr:{id: placeName}, visible: placeDirectionsDisplay'  ></div> -->
+        <div class = "container">
+            <input type="text" placeholder="Search for a place" style="margin-top:20px"data-bind=" textInput: inputValue">
+            <p id="showAllTitles" data-bind ="click:showAllTitles">Show all Places </p>
+            <p>SF Popular Places</p>
+            <div class="placesContainer" data-bind = "foreach:placesContainer">
+              <div class= "placeNameContainer" data-bind ="attr:{id: name}">
+                  <span data-bind="text:$index(), visible: titleVisible" ></span>
+                  <span data-bind = "text: name, click:$parent.passClickInformation, visible:titleVisible"></span>
+              </div>
+            </div>
+          <div data-bind ="visible:infoVisible">
+            <p data-bind="text:placeAddress"></p>
+            <p> Wikipedia Information<p>
+            <p data-bind="html:wikiInfo"></p>
+            <p> <a data-bind="attr:{href:url}">More Info</a></p>
+            <span data-bind="click: callGoogleDirections">Take me there</span>
+            <select id="travelMode">
+                <option value="DRIVING">Drive</option>
+                <option value="WALKING">Walk</option>
+                <option value="BICYCLING">Bike</option>
+                <option value="TRANSIT">Transit</option>
+            </select>
+            <div id="steps"></div>
           </div>
-
-        </div>
-        <div data-bind ="visible:infoVisible">
-          <div data-bind="text:placeAddress"></div>
-          <p> Wikipedia Information<p>
-          <p data-bind="html:wikiInfo"></p>
-          <p> <a data-bind="attr:{href:url}">More Info</a> </p>
-        </>
-          <p data-bind="click: callGoogleDirections">Take me there</p>
-          <div id="steps"></div>
-
         </div>
       </div>
-
-
       <script async defer
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY&signed_in=true&libraries=places&language=en&v=3&callback=initMap">
-          </script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY&signed_in=true&libraries=places&language=en&v=3&callback=initMap">
+      </script>
 
         <script type='text/javascript' src='js/lib/knockout-3.4.0.js'></script>
         <script src="js/script-main.js"></script>
