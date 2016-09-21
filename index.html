@@ -12,6 +12,29 @@
           padding: 0;
         }
 
+        button{
+          background-color: white;
+      color: white;
+      border: 2px solid #4CAF50;
+      border-radius: 2px;
+      padding: 1% 7.4%;
+      -webkit-transition-duration: 0.4s;
+      transition-duration: 0.4s;
+       background-color: #4CAF50;
+       margin: 1em;
+        }
+
+        button:hover {
+          background-color: white;
+          color: black;
+        }
+        h2{
+          margin: 0;
+    font-size: -webkit-xxx-large;
+        }
+        .info{
+          margin: 1em;
+        }
         #map {
           height: 100%;
         }
@@ -22,24 +45,29 @@
           margin: 1em;
         }
         .placesContainer{
-          font-size: 1.5em;
+          font-size: 1.6em;
         }
         .placeNameContainer{
-          margin: 0.8em;
+          margin: 4% 3%;
 
         }
+
         #showAllTitles{
 
-
+          /*margin: 2em 0 1em 3em;*/
         }
-        input{
-          width: 100%;
-          margin:0;
-          //text-align: left;
-
+        .showOrHideLocation{
 
         }
 
+        input[type=text] {
+          border: 0.5px solid #4CAF50;
+          border-radius: 2px;
+
+          height: 5%;
+          margin: 0.5 1em;
+          width: 92%;
+        }
       </style>
   	<title>DiscoveringSF</title>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -49,19 +77,22 @@
       <div id="map" style="float:right;width:75%; height:100% " ></div>
       <div id="mode" style="float:left;width:25%;height 100%">
         <div class = "container">
-            <input type="text" placeholder="Search for a place" style="margin-top:20px"data-bind=" textInput: inputValue">
+          <h2>SF Popular Places</h2>
+          <div class= "input-container">
+            <input type="text" placeholder="Search for a place" data-bind=" textInput: inputValue">
+          </div>
             <div>
-            <button data-bind="text: showOrHideLocation,  click:getUserLocation"></button>
+            <button id ="showOrHideLocation" data-bind="text: showOrHideLocation,  click:getUserLocation"></button>
             <button id="showAllTitles" data-bind =" text: textValue, click:showAllTitles">Show all Places </button>
           </div>
-            <h2>SF Popular Places</h2>
+
             <div class="placesContainer" data-bind = "foreach:placesContainer">
-              <div class= "placeNameContainer" data-bind ="attr:{id: name}">
+              <div class= "placeNameContainer " data-bind ="attr:{id: name}">
                   <span data-bind="text:$index(), visible: titleVisible" ></span>
                   <span data-bind = "text: name, click:$parent.passClickInformation, visible:titleVisible"></span>
               </div>
             </div>
-          <div data-bind ="visible:infoVisible">
+          <div class="info" data-bind ="visible:infoVisible">
             <p data-bind="text:placeAddress"></p>
             <p> Wikipedia Information<p>
             <p data-bind="html:wikiInfo"></p>

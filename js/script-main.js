@@ -8,7 +8,7 @@ var placesContainer= ko.observable([
 					{ name:"Mount Davidson", location: {lat: 37.73833330000001, lng: -122.4533333}, titleVisible:ko.observable(true)},
 					{name:"San Francisco Ferry Building", location: {lat: 37.7955469, lng: -122.39341769999999}, titleVisible:ko.observable(true)},
 					{name: "Coit Tower", location:{lat: 37.8023949, lng: -122.40582219999999}, titleVisible:ko.observable(true)},
-					{name: "Mission District", location:{lat: 37.7598648, lng: -122.41479770000001}, titleVisible:ko.observable(true)},
+					{name:'de Young Museum', location:{lat: 37.7714732, lng: -122.4708642 }, titleVisible:ko.observable(true)},
 					{name:"The Castro Theatre", location:{lat: 37.761992, lng: -122.43473590000002}, titleVisible:ko.observable(true)},
 					{name:"Alcatraz Island", location:{lat: 37.8269775, lng: -122.4229555}, titleVisible:ko.observable(true)}
 				]);
@@ -476,6 +476,7 @@ function myViewModel(){
 	    		alert("Sorry we couldn't find any Wikipedia Information for the place you are looking for");
 	    	}
 	    	else if(data.query.search.length>0){
+	    		console.log(data)
 
 	    		var wikiPlaceInfo = data.query.search[0].snippet;
 	    		self.wikiInfo(wikiPlaceInfo);
