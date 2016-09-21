@@ -17,6 +17,7 @@
     "jshint-stylish": "^2.2.1",
     "ngrok": "^2.2.2",
     "psi": "^2.0.4",
-    "run-sequence": "^1.2.2"
+    "run-sequence": "^1.2.2",
+    "standard": "^8.1.0"
   }
 }
