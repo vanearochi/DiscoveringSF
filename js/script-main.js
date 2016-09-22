@@ -1,4 +1,6 @@
 //TODO: Modify css functions for responsiveness
+
+//TODO: change 0123
 var map;
 var placesContainer= ko.observable([
 					{ name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}, titleVisible:ko.observable(true)},
@@ -13,8 +15,11 @@ var placesContainer= ko.observable([
 					{name:"Alcatraz Island", location:{lat: 37.8269775, lng: -122.4229555}, titleVisible:ko.observable(true)}
 				]);
 
-
-
+// var abc = function (){
+// 	console.log("plum")
+// ko.observable(["A", "B", "C" ])
+// }
+var abc = ["A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I  ", "J " ]
 var markerSelected=ko.observable("");
 var koAddress = ko.observable("");
 var selectedStatus = ko.observable(false);
@@ -31,12 +36,7 @@ var userMarker;
 
 function initMap(){
 	http://stackoverflow.com/questions/18444161/google-maps-responsive-resize
-	google.maps.event.addDomListener(window, 'resize', function(){
-		console.log("sucess change screen size")
-		var center = map.getCenter();
-     google.maps.event.trigger(map, "resize");
-     map.setCenter(center);
-	})
+
 
 	var directionsDisplay;
 
@@ -49,21 +49,29 @@ function initMap(){
 
     });
 
+	google.maps.event.addDomListener(window, 'resize', function(){
+		console.log("sucess change screen size")
+		var center = map.getCenter();
+     google.maps.event.trigger(map, "resize");
+     map.setCenter(center);
+     map.setZoom(11)
+	})
 	//Iterating over placesList to look for it in Google's places library
-	//Call createMarker
+	var counter;
 	for (var i = 0; i < placesContainer().length; i++) {
 
 
 		var position = placesContainer()[i].location;
-		var counter = i + 1;
+		counter = i + 1;
 		createMarker(placesContainer()[i], counter);
 
 	}
 
 	function createMarker(place, counter){
 
-			var labelStr = i.toString();
+			var labelStr = String.fromCharCode(65+i)
 			var title = place.name;
+			//console.log(counter)
 			var marker = new google.maps.Marker({
 
 	    		position: position,
@@ -347,6 +355,9 @@ function myViewModel(){
 	self.showOrHideLocation = ko.observable("Show my location")
 	self.textValue = ko.observable("Show all places")
 
+	self.trial = function(){
+		console.log("sucess trial")
+	}
 
 
 	self.giveWikiInfo = function(name){
