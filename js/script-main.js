@@ -164,12 +164,12 @@ function initMap(){
 	      		loadingDirections(false);
     		}
     		else if(status == google.maps.DirectionsStatus.ZERO_RESULTS){
-    			alert("No route could be found between the origin and destination. Please try another travel mode");
     			loadingDirections(false);
+    			alert("No route could be found between the origin and destination. Please try another travel mode");
     		}
     		else{
-    			alert("Sorry there was an error:" + status);
     			loadingDirections(false);
+    			alert("Sorry there was an error:" + status);
     		}
 		});
     };
