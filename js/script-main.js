@@ -25,6 +25,9 @@ var showAllMarkers;
 var hideOrShowMarker;
 var showUserLocation;
 var userMarker;
+var loadingCurrentLocation = ko.observable(false);
+var loadingDirections = ko.observable(false);
+
 
 
 function initMap(){
@@ -40,8 +43,7 @@ function initMap(){
 
 	/**
 	 * Event listener for map responsiviness.
-	 * Changes center and zoom.
-	 * From: http://stackoverflow.com/questions/18444161/google-maps-responsive-resize
+	 * Tip from: http://stackoverflow.com/questions/18444161/google-maps-responsive-resize
 	*/
 	google.maps.event.addDomListener(window, 'resize', function(){
 		var center = map.getCenter();
@@ -53,7 +55,6 @@ function initMap(){
 
 	/**
 	  * Iterate over placesList array to create a marker for each place.
-	  * Calls createMarker function.
 	*/
 	for (var i = 0; i < placesContainer().length; i++) {
 		var position = placesContainer()[i].location;
@@ -95,10 +96,6 @@ function initMap(){
 
 	/**
 	  * Marker click event handler.
-	  * Call hideMarkers
-	  * Call askInfoToPlacesLibrary for place info.
-	  * Assign selected marker to markerSelected observable so notifies ko to change DOM.
-	  * Change value of selectedStatus to keep record when running other functions.
 	*/
 	function selectThisMarker(){
 		markerSelected(this);
@@ -110,15 +107,15 @@ function initMap(){
 	/**
 	  * Get place's information(address) from Google.
 	  * @param {Object} marker - Selected place marker.
-	  * Change koAddress observable value.
 	*/
 	askInfoToPlacesLibrary = function(marker){
 		var name = marker.title;
 		var placeServices = new google.maps.places.PlacesService(map);
 		placeServices.textSearch({query: name}, placeInformation);
-		marker.setAnimation(google.maps.Animation.DROP);
+		marker.setAnimation(google.maps.Animation.BOUNCE);
 
 		function placeInformation(data, status){
+			marker.setAnimation(null);
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				var placeInfo = data[0];
 				var address = placeInfo.formatted_address;
@@ -130,7 +127,7 @@ function initMap(){
 
 
 	/**
-	  * Get directions from user location to a place selected from the list.
+	  * Get directions from user location to place selected from the list.
 	  * @param {Object} geoposition.
 	*/
 	showDirections = function(geoposition){
@@ -164,12 +161,15 @@ function initMap(){
 	    		}
 	    		markerSelected().setVisible(false);
 	      		directionsDisplay.setDirections(response);
+	      		loadingDirections(false);
     		}
     		else if(status == google.maps.DirectionsStatus.ZERO_RESULTS){
     			alert("No route could be found between the origin and destination. Please try another travel mode");
+    			loadingDirections(false);
     		}
     		else{
     			alert("Sorry there was an error:" + status);
+    			loadingDirections(false);
     		}
 		});
     };
@@ -198,17 +198,14 @@ function initMap(){
 		}
 	};
 
-
 	/**
 	  * Show all markers on map.
-	  * Change zoom, animation, center and selected Status to the initial values.
-	  * If there were directions on the map it will remove them
+	  * If there were directions on the map it will remove them.
 	*/
 	showAllMarkers = function(){
 
 		selectedStatus(false);
 		map.setZoom(12);
-		markerSelected().setAnimation(null);
 		map.setCenter({ lat: 37.82, lng: -122.431297});
 
 		if(directionsDisplay !== undefined){
@@ -347,11 +344,14 @@ function myViewModel(){
 
 	/**
 	  * Handler for click on showAllTitles button.
-	  * Hide all names from the list except from the selected place.
+	  * Hide all names from the list except the one from the selected place.
 	*/
 	self.showAllTitles = function(){
 
-		if(markerSelected()!== ""){
+		// if(markerSelected()!== ""){
+			if(loadingDirections === true){
+				loadingDirections(false);
+			}
 			showAllMarkers();
 			self.infoVisible(false);
 			self.inputValue("");
@@ -359,13 +359,12 @@ function myViewModel(){
 			for (var i = 0; i < placesContainer().length; i++) {
 				placesContainer()[i].titleVisible(true);
 			}
-		}
+		// }
 	};
 
 	/**
-	  * Notify when the observable markerSelected change.
+	  * MarkerSelected change callback.
 	  * @param {function} anonymous - Callback called when notification happens.
-	  * Callback parameter is the marker from the selected place.
 	*/
 	markerSelected.subscribe(function(marker){
 
@@ -375,9 +374,8 @@ function myViewModel(){
 		}
 	});
 
-	/**
-	  * inputValue change callback.
-	  * @param {String} newValue - Value entered on text input
+	/** InputValue change callback.
+	  * @param {String} newValue - Value entered on text input.
 	*/
 	self.inputValue.subscribe(function(newValue) {
 
@@ -420,7 +418,7 @@ function myViewModel(){
 		self.placeAddress(address);
 	});
 
-	/** Handle callback from wikipedia API request.
+	/** Function that handles callback from wikipedia API request.
 	  * Assign value to observables to show wikipedia information.
 	  * @param {Object} marker - Marker of place selected by user.
 	*/
@@ -443,28 +441,26 @@ function myViewModel(){
 
 	/** Handles click event of take me there button.
 	 *	Ask for geolocation to begin the request for directions.
-	 *  Ask to hide user location marker.
 	*/
 	self.callGoogleDirections = function(){
 
 		self.getGeolocation(showDirections);
 		self.showOrHideLocation("Show my location");
+		loadingDirections(true);
 	};
 
 	/** Handles click event on showHideLocation button
-	  * Show o hide user's marker location.
 	*/
 	self.getUserLocation = function(){
-
-		if(self.showOrHideLocation()==="Show my location"){
-			self.showOrHideLocation("Hide my location");
-			self.getGeolocation(showUserLocation);
-		}
-		else{
-			self.showOrHideLocation("Show my location");
-			console.log(userMarker);
-			hideOrShowMarker(userMarker, false);
-		}
+			if(self.showOrHideLocation()==="Show my location"){
+				loadingCurrentLocation(true);
+				self.getGeolocation(showUserLocation);
+			}
+			else{
+				self.showOrHideLocation("Show my location");
+				console.log(userMarker);
+				hideOrShowMarker(userMarker, false);
+			}
 	};
 
 	/** Get user's location*/
@@ -481,7 +477,11 @@ function myViewModel(){
 		//https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 		function positionCall(data){
 
+			if(loadingDirections() === false){
+				self.showOrHideLocation("Hide my location");
+			}
 			toWhomDeliverData(data);
+	      	loadingCurrentLocation(false);
 		}
 
 		function failPosition(error){

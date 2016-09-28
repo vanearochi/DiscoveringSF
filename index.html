@@ -16,10 +16,10 @@
               <div class = "container">
                   <h1>SF Popular Places</h1>
                   <div class= "input-container">
-                  <input type="text" placeholder="Search for a place" data-bind=" textInput: inputValue">
+                  <input type="text" placeholder="Search for a place" data-bind=" textInput: inputValue, disable:loadingDirections">
               </div>
               <div class= "button-container">
-                  <button id ="showOrHideLocation" data-bind="text: showOrHideLocation, click:getUserLocation"></button>
+                  <button id ="showOrHideLocation" data-bind="text: showOrHideLocation, click:getUserLocation, disable: loadingCurrentLocation, style:{ backgroundColor: loadingCurrentLocation() ? 'white' : '#FF1010', color: loadingCurrentLocation() ? 'black' : 'white'}, disable: loadingDirections"></button>
                   <button id="showAllTitles" data-bind =" text: textValue, click:showAllTitles">Show all Places </button>
               </div>
               <div class="placesContainer" data-bind = "foreach:placesContainer">
@@ -34,13 +34,18 @@
                   <p> Wikipedia Information<p>
                   <p data-bind="html:wikiInfo"></p>
                   <p><a class="link" data-bind="attr:{href:url}">More Info</a></p>
+
                   <span class="link" data-bind="click: callGoogleDirections">Take me there by</span>
+
                   <select id="travelMode">
                       <option value="DRIVING">Car</option>
                       <option value="WALKING">Foot</option>
                       <option value="BICYCLING">Bike</option>
                       <option value="TRANSIT">Public Transportation</option>
                   </select>
+                  <div data-bind='visible:loadingDirections'>
+                   <div class="loader"></div><span> Loading</span>
+                </div>
                   <div id="steps"></div>
               </div>
           </div>

@@ -1,10 +1,31 @@
 var gulp = require('gulp'),
 	gutil = require('gulp-util'),
-	jshint = require('gulp-jshint');
+  uglify = require('gulp-uglify'),
+  cssnano = require('gulp-cssnano'),
+	jshint = require('gulp-jshint'),
+  htmlmin = require('gulp-htmlmin');
 //var $ = require('gulp-load-plugins')();
 
 var ngrok = require('ngrok');
-var connect = connect = require('gulp-connect')
+var connect = require('gulp-connect');
+
+gulp.task('htmlmin', function() {
+  return gulp.src('*.html')
+    .pipe(htmlmin({collapseWhitespace: true}))
+    .pipe(gulp.dest('dist'))
+});
+
+gulp.task("jsmin", function(){
+  return gulp.src("js/*.js")
+  .pipe(uglify())
+  .pipe(gulp.dest("dist/js"))
+})
+
+gulp.task("cssmin", function(){
+  return gulp.src('css/*.css')
+  .pipe(cssnano())
+  .pipe(gulp.dest('dist/css'))
+})
 
 gulp.task('ngrok-url', function(cb) {
   return ngrok.connect(3000, function (err, url) {
@@ -30,16 +51,3 @@ gulp.task('connect', function() {
 
 gulp.task('default', ['connect']);
 
-
-// gulp.task('ngrok-url', function(cb) {
-//   return ngrok.connect(8080, function (err, url) {
-//     site = url;
-//     console.log('serving your tunnel from: ' + site);
-//     cb();
-//   });
-// });
-//TODO: verify how does jshint works, minify everything at the end and reload automatically
-
-// gulp.task('watch', function(){
-// 	gulp.watch('js/script-main.js', ['jshint'])
-// })

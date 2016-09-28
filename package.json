@@ -10,8 +10,11 @@
   "license": "ISC",
   "devDependencies": {
     "gulp-connect": "^5.0.0",
+    "gulp-cssnano": "^2.1.2",
     "gulp-exit": "0.0.2",
+    "gulp-htmlmin": "^3.0.0",
     "gulp-jshint": "^2.0.1",
+    "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "jshint": "^2.9.2",
     "jshint-stylish": "^2.2.1",
