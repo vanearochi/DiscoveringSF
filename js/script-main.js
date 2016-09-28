@@ -471,6 +471,8 @@ function myViewModel(){
 			geo.getCurrentPosition(positionCall, failPosition);
 		}
 		else{
+			loadingDirections(false);
+			loadingCurrentLocation(false)
 			alert("Sorry geolocation is not available");
 		}
 
@@ -485,8 +487,9 @@ function myViewModel(){
 		}
 
 		function failPosition(error){
+			loadingDirections(false);
+			loadingCurrentLocation(false)
 			alert("Sorry there was an error:" + error.code + " " + error.message);
-
 		}
 	};
 
