@@ -3,11 +3,8 @@ var gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   cssnano = require('gulp-cssnano'),
 	jshint = require('gulp-jshint'),
-  htmlmin = require('gulp-htmlmin');
-//var $ = require('gulp-load-plugins')();
-
-var ngrok = require('ngrok');
-var connect = require('gulp-connect');
+  htmlmin = require('gulp-htmlmin'),
+  connect = require('gulp-connect');
 
 gulp.task('htmlmin', function() {
   return gulp.src('*.html')
@@ -27,13 +24,6 @@ gulp.task("cssmin", function(){
   .pipe(gulp.dest('dist/css'))
 })
 
-gulp.task('ngrok-url', function(cb) {
-  return ngrok.connect(3000, function (err, url) {
-    site = url;
-    console.log('serving your tunnel from: ' + site);
-    cb();
-  });
-});
 
 gulp.task('default', function() {
   return gutil.log('Gulp is running!')
@@ -48,6 +38,7 @@ gulp.task('jshint', function(){
 gulp.task('connect', function() {
   connect.server();
 });
+
 
 gulp.task('default', ['connect']);
 
