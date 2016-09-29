@@ -1,7 +1,7 @@
 
 html,
 body {
-  	font-family: 'Pavanam', monospace;
+  	font-family: "Pavanam", monospace;
   	height: 100%;
   	margin: 0;
   	padding: 0;
@@ -9,13 +9,13 @@ body {
 
 button {
 	color: white;
-	border: 2px solid #FF1010;
+	border: 2px solid #ff1010;
 	border-radius: 2px;
 	width: 35%;
 	font: bold small;
 	-webkit-transition-duration: 0.4s;
 	transition-duration: 0.4s;
-	background-color: #FF1010;
+	background-color: #ff1010;
 	margin: 1em;
 
 }
@@ -27,7 +27,7 @@ button:hover {
 
 }
 
-.generalContainer {
+.general-container {
 	display: flex;
 	flex-direction:row-reverse;
 	flex-wrap:  wrap;
@@ -61,23 +61,23 @@ button:hover {
 	margin: 1em;
 }
 
-.placesContainer {
+.places-container {
 	font-size: 1.6em;
 }
 
-.placeNameContainer {
+.place-name-container {
 	margin:  6% ;
 
 
 }
-.placeNameContainer:hover {
+.place-name-container:hover {
     font-weight: bold;
 
 }
 
 .label {
 	font-weight: bold;
-	color: #FF1010;
+	color: #ff1010;
 }
 
 .link:hover {

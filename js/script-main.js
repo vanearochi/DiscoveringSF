@@ -1,4 +1,5 @@
-//TODO: add border bottom to names container
+
+//TODO: add strict mode and check why it doesnt work with promise
 var map;
 var placesContainer= ko.observable([
 					{ name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}, titleVisible:ko.observable(true)},
@@ -275,7 +276,22 @@ function initMap(){
     		map.panBy(0,0);
 		});
 	};
+
+
+
 }
+
+
+
+
+function errorHandler(){
+	//var script = document.getElementById('mp')
+	//var scriptSrc = mp.src
+	alert("Sorry there was an " + this.event.type +".Please see the Javascript console for technical details")
+
+}
+
+
 
 /** Function binded to Knockout */
 function myViewModel(){
