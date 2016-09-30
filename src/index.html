@@ -1,0 +1,57 @@
+
+<!doctype html>
+<html>
+  <head>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <!-- http://www.favicon.cc/?action=icon&file_id=721832 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Pavanam" rel="stylesheet">
+    <link rel="stylesheet" href="css/style-main.css">
+  	<title>DiscoveringSF</title>
+  </head>
+  <body>
+      <section class="general-container">
+          <main id="map"></main>
+          <aside id="mode">
+              <section class = "container">
+                  <header>
+                      <h1>SF Popular Places</h1>
+                      <div class= "input-container">
+                          <input type="text" placeholder="Search for a place" data-bind=" textInput: inputValue, disable:loadingDirections">
+                      </div>
+                      <div class= "button-container">
+                          <button id ="show-hide-location" data-bind="text: showOrHideLocation, click:getUserLocation, disable: loadingCurrentLocation, style:{ backgroundColor: loadingCurrentLocation() ? 'white' : '#FF1010', color: loadingCurrentLocation() ? 'black' : 'white'}, disable: loadingDirections"></button>
+                          <button id="show-titles" data-bind =" text: textValue, click:showAllTitles">Show all Places </button>
+                      </div>
+                  </header>
+              <nav class="places-container" data-bind = "foreach:placesContainer">
+                  <section class= "place-name-container " data-bind ="attr:{id: name}, click:$parent.passClickInformation,
+                  style:{ borderBottom: titleVisible() ? '1px solid rgb(185,185,185)':'none' }">
+                      <span class="label" data-bind="text:abc[$index()], visible: titleVisible " ></span>
+                      <span data-bind = "text: name, visible:titleVisible"></span>
+                  </section>
+              </nav>
+              <section class="info" data-bind ="visible:infoVisible">
+                  <p data-bind="text:placeAddress"></p>
+                  <p> Wikipedia Information<p>
+                  <p data-bind="html:wikiInfo"></p>
+                  <p><a class="link" data-bind="attr:{href:url}">More Info</a></p>
+                  <span class="link" data-bind="click: callGoogleDirections">Take me there by</span>
+                  <select id="travelMode" data-bind= "options: travelMode, optionsText:'mode', value:choosenTravelMode"></select>
+                  <div data-bind='visible:loadingDirections'>
+                  <div class="loader"></div><span> Loading</span></div>
+                  <div id="steps"></div>
+              </section>
+          </section>
+        </aside>
+      </section>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+      <script src='js/lib/knockout-3.4.0.js'></script>
+      <script src="js/script-main.js"></script>
+      <script  async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMR-JZxHodA_0a1ZToUalCpVADTc0iEDY&signed_in=true&libraries=places&language=en&v=3&callback=initMap"
+      onerror = 'errorHandler()' >
+      </script>
+
+  </body>
+</html>
