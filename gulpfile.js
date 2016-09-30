@@ -45,5 +45,5 @@ gulp.task('browser-sync', function() {
 
 
 
-gulp.task('default', ['browser-sync', 'htmlmin', 'cssmin', 'jshint']);
+gulp.task('default', ['browser-sync', 'htmlmin', 'cssmin', 'jsmin']);
 
