@@ -345,7 +345,7 @@ function myViewModel(){
 
 		wikiPromise = $.ajax({
 			type: 'get',
-			url:"https://www.wikipedia.org/w/api.php?action=query&list=search&srsearch="+nameWithUnderscore+"_California&format=json&callback=wikiCallback",
+			url:'https://www.wikipedia.org/w/api.php?action=query&list=search&srsearch='+nameWithUnderscore+'_California&format=json&callback=wikiCallback',
 			dataType: 'jsonp'
 		});
 
@@ -480,7 +480,7 @@ function myViewModel(){
 		});
 		wikiPromise.fail(function(data){
 
-			alert("Sorry there was an problem with your request: " + data.status + " " + data.statusText);
+			alert('Sorry there was an problem with your request: ' + data.status + ' ' + data.statusText);
 
 		});
 
