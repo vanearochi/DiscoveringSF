@@ -165,7 +165,6 @@ function initMap(){
 			}
 		}
 
-		//var travelMode;
 		var latitude= geoposition.coords.latitude;
 		var longitud = geoposition.coords.longitude;
 		var userLocation = {lat: latitude, lng: longitud};
@@ -214,11 +213,9 @@ function initMap(){
 		map.setCenter(marker.position);
 
 		for (var i = 0; i < placesContainer().length; i++) {
-
 			var place = placesContainer()[i];
 
 			if(place.marker != marker){
-
 				place.marker.setVisible(false);
 			}
 		}
@@ -312,7 +309,6 @@ function initMap(){
 function errorHandler(){
 
 	alert('Sorry there was an ' + this.event.type +'.Please see the Javascript console for technical details');
-
 }
 
 
@@ -349,7 +345,7 @@ function myViewModel(){
 			dataType: 'jsonp'
 		});
 
-		return wikiPromise;
+		return wikiPromise;git
 	};
 
 	/**
@@ -389,7 +385,6 @@ function myViewModel(){
 	*/
 	self.showAllTitles = function(){
 
-		// if(markerSelected()!== ''){
 			if(loadingDirections === true){
 				loadingDirections(false);
 			}
@@ -400,7 +395,6 @@ function myViewModel(){
 			for (var i = 0; i < placesContainer().length; i++) {
 				placesContainer()[i].titleVisible(true);
 			}
-		// }
 	};
 
 	/**
@@ -496,8 +490,7 @@ function myViewModel(){
 		loadingDirections(true);
 	};
 
-	/** Handles click event on showHideLocation button
-	*/
+	/** Handles click event on showHideLocation button */
 	self.getUserLocation = function(){
 			if(self.showOrHideLocation()==='Show my location'){
 				loadingCurrentLocation(true);
@@ -510,7 +503,7 @@ function myViewModel(){
 			}
 	};
 
-	/** Get user's location*/
+	/** Get user's location */
 	self.getGeolocation= function(toWhomDeliverData){
 
 		if('geolocation' in navigator){
@@ -538,10 +531,7 @@ function myViewModel(){
 			loadingCurrentLocation(false);
 			alert('Sorry there was an error:' + error.code + ' ' + error.message);
 		}
-
 	};
-
-
 }
 
 

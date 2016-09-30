@@ -25,7 +25,6 @@ gulp.task('cssmin', function(){
   .pipe(gulp.dest('dist/css'));
 });
 
-
 gulp.task('default', function() {
   return gutil.log('Gulp is running!');
 });
@@ -35,7 +34,6 @@ gulp.task('jshint', function(){
 		.pipe(jshint())
 		.pipe(jshint.reporter('default'));
 });
-
 
 gulp.task('browser-sync', function() {
     browserSync.init({

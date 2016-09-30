@@ -17,7 +17,6 @@ button {
 	transition-duration: 0.4s;
 	background-color: #ff1010;
 	margin: 1em;
-
 }
 
 button:hover {
@@ -134,7 +133,6 @@ input[type=text] {
 	#mode{
 		width:100%;
 	}
-
 }
 
 
