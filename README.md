@@ -25,5 +25,3 @@ Let's begin and install the tools that we are going to need:
 -      gulp
 
 
-//TODO: try browserify
-//Run jshint
