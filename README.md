@@ -18,10 +18,7 @@ Let's begin and install the tools that we are going to need:
 - Open your terminal and go to the project directory (How I change directories from the command line on my terminal? http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything )
 
 - Install the requirements using npm, this will install all modules listed as dependencies in the package.json of the project. In the project's root directory on the command line type:
--       npm install
-
--  Install gulp locally.
--       npm install --save-dev gulp
+-       npm i
 
 - Minimize html, css and js files with gulp's modules; htmlmin, cssnano and jshint. Type the follow on your command line on project's root directory:
 -      gulp htmlmin
@@ -36,3 +33,5 @@ Let's begin and install the tools that we are going to need:
 - Now you can see the index.html file on your browser when opening:
 -      localhost:8080
 
+//TODO: try browserify
+//Run jshint

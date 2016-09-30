@@ -38,14 +38,9 @@
                   <p data-bind="html:wikiInfo"></p>
                   <p><a class="link" data-bind="attr:{href:url}">More Info</a></p>
                   <span class="link" data-bind="click: callGoogleDirections">Take me there by</span>
-                  <select id="travelMode">
-                      <option value="DRIVING">Car</option>
-                      <option value="WALKING">Foot</option>
-                      <option value="BICYCLING">Bike</option>
-                      <option value="TRANSIT">Public Transportation</option>
-                  </select>
+                  <select id="travelMode" data-bind= "options: travelMode, optionsText:'mode', value:choosenTravelMode"></select>
                   <div data-bind='visible:loadingDirections'>
-                   <div class="loader"></div><span> Loading</span>
+                  <div class="loader"></div><span> Loading</span>
                 </div>
                   <div id="steps"></div>
               </section>

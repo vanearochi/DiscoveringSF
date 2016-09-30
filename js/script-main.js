@@ -1,33 +1,44 @@
+'use Strict'
 
-//TODO: add strict mode and check why it doesnt work with promise
 var map;
 var placesContainer= ko.observable([
 					{ name:'Golden Gate Bridge', location:{lat: 37.8199286, lng: -122.47825510000001}, titleVisible:ko.observable(true)},
 					{ name:'Crissy Field', location: {lat: 37.8039, lng: -122.4641}, titleVisible:ko.observable(true)},
-					{ name:"Golden Gate Park", location: {lat: 37.7694208, lng: -122.48621379999997}, titleVisible:ko.observable(true)},
-					{ name:"Fort Point", location: {lat: 37.8105931, lng: -122.4771093}, titleVisible:ko.observable(true)},
-					{ name:"Mount Davidson", location: {lat: 37.73833330000001, lng: -122.4533333}, titleVisible:ko.observable(true)},
-					{ name:"San Francisco Ferry Building", location: {lat: 37.7955469, lng: -122.39341769999999}, titleVisible:ko.observable(true)},
+					{ name:'Golden Gate Park', location: {lat: 37.7694208, lng: -122.48621379999997}, titleVisible:ko.observable(true)},
+					{ name:'Fort Point', location: {lat: 37.8105931, lng: -122.4771093}, titleVisible:ko.observable(true)},
+					{ name:'Mount Davidson', location: {lat: 37.73833330000001, lng: -122.4533333}, titleVisible:ko.observable(true)},
+					{ name:'San Francisco Ferry Building', location: {lat: 37.7955469, lng: -122.39341769999999}, titleVisible:ko.observable(true)},
 					{ name: 'San Francisco Symphony', location:{lat: 37.777629, lng: -122.4906083}, titleVisible:ko.observable(true)},
 					{ name:'de Young Museum', location:{lat: 37.7714732, lng: -122.4708642 }, titleVisible:ko.observable(true)},
-					{ name:'Bay Bridge', location:{lat: 37.7982799, lng: -122.377777}, titleVisible:ko.observable(true)},
+					{ name:'Bay Bridge', location:{lat: 47.7982799, lng: -122.377777}, titleVisible:ko.observable(true)},
 					{ name:'Alcatraz Island', location:{lat: 37.8269775, lng: -122.4229555}, titleVisible:ko.observable(true)}
 				]);
 
+var TravelMode = function(mode, str){
+			this.mode = mode;
+			this.directionsStr = str;
+		}
 
-var abc = ["A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J " ];
-var markerSelected=ko.observable("");
-var koAddress = ko.observable("");
-var selectedStatus = ko.observable(false);
-var askInfoToPlacesLibrary;
-var hideMarkers;
-var showDirections;
-var showAllMarkers;
-var hideOrShowMarker;
-var showUserLocation;
-var userMarker;
-var loadingCurrentLocation = ko.observable(false);
-var loadingDirections = ko.observable(false);
+var abc = ['A ', 'B ', 'C ', 'D ', 'E ', 'F ', 'G ', 'H ', 'I ', 'J ' ],
+	markerSelected=ko.observable(''),
+	koAddress = ko.observable(''),
+	selectedStatus = ko.observable(false),
+	askInfoToPlacesLibrary,
+	hideMarkers,
+	showDirections,
+	showAllMarkers,
+	hideOrShowMarker,
+	showUserLocation,
+	userMarker,
+	loadingCurrentLocation = ko.observable(false),
+	loadingDirections = ko.observable(false),
+	travelMode= ko.observable([
+			new TravelMode('Car', 'DRIVING'),
+			new TravelMode('Foot', 'WALKING'),
+			new TravelMode('Bike', 'BICYCLING'),
+			new TravelMode('Public Transportation', 'TRANSIT' )
+			]),
+	choosenTravelMode = ko.observable(travelMode()[0]);
 
 
 
@@ -48,7 +59,7 @@ function initMap(){
 	*/
 	google.maps.event.addDomListener(window, 'resize', function(){
 		var center = map.getCenter();
-     	google.maps.event.trigger(map, "resize");
+     	google.maps.event.trigger(map, 'resize');
      	map.setCenter(center);
     	map.setZoom(11);
 	});
@@ -75,7 +86,7 @@ function initMap(){
 	    		map: map,
 	    		icon: {
 	    			//path from http://map-icons.com/
-					path: "M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z",
+					path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
 					fillColor: '#FF1010',
 					fillOpacity: 0.7,
 					strokeWeight: 3,
@@ -86,7 +97,7 @@ function initMap(){
 	    		id: i,
 	    		label: {
 	    			text: labelStr,
-	    			fontSize: "18px"
+	    			fontSize: '18px'
 	    		},
 	    		visible: true,
 	    		//http://stackoverflow.com/questions/34251143/how-to-show-label-on-custom-icon-image-in-google-map-api
@@ -110,18 +121,29 @@ function initMap(){
 	  * @param {Object} marker - Selected place marker.
 	*/
 	askInfoToPlacesLibrary = function(marker){
+
 		var name = marker.title;
 		var placeServices = new google.maps.places.PlacesService(map);
 		placeServices.textSearch({query: name}, placeInformation);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 
 		function placeInformation(data, status){
+			console.log(status)
 			marker.setAnimation(null);
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				var placeInfo = data[0];
 				var address = placeInfo.formatted_address;
-				koAddress("");
+				koAddress('');
 				koAddress(address);
+			}
+			else if(status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS){
+
+				alert("Sorry we could't find any result for your search");
+
+			}
+			else{
+
+				'Sorry there was an error.Please see the Javascript console for technical details' + status;
 			}
 		}
 	};
@@ -140,7 +162,7 @@ function initMap(){
 			}
 		}
 
-		var travelMode;
+		//var travelMode;
 		var latitude= geoposition.coords.latitude;
 		var longitud = geoposition.coords.longitude;
 		var userLocation = {lat: latitude, lng: longitud};
@@ -148,7 +170,7 @@ function initMap(){
 		directionsDisplay = new google.maps.DirectionsRenderer();
 		directionsDisplay.setMap(map);
 		directionsDisplay.setPanel(document.getElementById('steps'));
-		travelMode = document.getElementById('travelMode').value;
+		var travelMode = choosenTravelMode().directionsStr;
 		var request = {
 	    	origin: userLocation,
 	     	destination: markerSelected().position,
@@ -166,11 +188,11 @@ function initMap(){
     		}
     		else if(status == google.maps.DirectionsStatus.ZERO_RESULTS){
     			loadingDirections(false);
-    			alert("No route could be found between the origin and destination. Please try another travel mode");
+    			alert('No route could be found between the origin and destination. Please try another travel mode');
     		}
     		else{
     			loadingDirections(false);
-    			alert("Sorry there was an error:" + status);
+    			alert('Sorry there was an error:' + status);
     		}
 		});
     };
@@ -247,7 +269,7 @@ function initMap(){
 	    		//http://stackoverflow.com/questions/34251143/how-to-show-label-on-custom-icon-image-in-google-map-api
 	    		icon: {
 	    			//path from: http://map-icons.com/
-					path: "M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z",
+					path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
 					fillColor: '#1569C7',
 					fillOpacity: 0.7,
 					strokeWeight: 3,
@@ -277,7 +299,7 @@ function initMap(){
 		});
 	};
 
-
+	ko.applyBindings(new myViewModel());
 
 }
 
@@ -285,9 +307,8 @@ function initMap(){
 
 
 function errorHandler(){
-	//var script = document.getElementById('mp')
-	//var scriptSrc = mp.src
-	alert("Sorry there was an " + this.event.type +".Please see the Javascript console for technical details")
+
+	alert('Sorry there was an ' + this.event.type +'.Please see the Javascript console for technical details')
 
 }
 
@@ -297,17 +318,19 @@ function errorHandler(){
 function myViewModel(){
 
 	var self = this;
+	var wikiPromise;
 	self.addressVisible = ko.observable(false);
 	self.infoVisible = ko.observable(false);
-	self.inputValue = ko.observable("");
-	self.placeAddress = ko.observable("");
-	self.wikiInfo = ko.observable("");
-	self.url = ko.observable("");
-	self.goToWikiPage = ko.observable("More Info");
+	self.inputValue = ko.observable('');
+	self.placeAddress = ko.observable('');
+	self.wikiInfo = ko.observable('');
+	self.url = ko.observable('');
+	self.goToWikiPage = ko.observable('More Info');
 	self.showMyLocation = ko.observable(true);
 	self.selectedStatus = ko.observable(false);
-	self.showOrHideLocation = ko.observable("Show my location");
-	self.textValue = ko.observable("Show all places");
+	self.showOrHideLocation = ko.observable('Show my location');
+	self.textValue = ko.observable('Show all places');
+
 
 	/**
 	  * Get wikipedia info of place.
@@ -315,15 +338,12 @@ function myViewModel(){
 	*/
 	self.giveWikiInfo = function(name){
 
-		var nameWithUnderscore = name.replace(/\s/g, "_");
+		var nameWithUnderscore = name.replace(/\s/g, '_');
 
 		wikiPromise = $.ajax({
-			type: "get",
+			type: 'get',
 			url:"https://www.wikipedia.org/w/api.php?action=query&list=search&srsearch="+nameWithUnderscore+"_California&format=json&callback=wikiCallback",
-			dataType: "jsonp",
-			error: function(e){
-				alert("Sorry there was an error: " + e.status + " " + e.statusText);
-			}
+			dataType: 'jsonp'
 		});
 
 		return wikiPromise;
@@ -341,6 +361,8 @@ function myViewModel(){
 		self.showWikiInfo(this.marker);
 		self.infoVisible(true);
 		selectedStatus(true);
+		console.log(choosenTravelMode())
+		console.log(travelMode())
 	};
 
 	/**
@@ -364,14 +386,14 @@ function myViewModel(){
 	*/
 	self.showAllTitles = function(){
 
-		// if(markerSelected()!== ""){
+		// if(markerSelected()!== ''){
 			if(loadingDirections === true){
 				loadingDirections(false);
 			}
 			showAllMarkers();
 			self.infoVisible(false);
-			self.inputValue("");
-			self.wikiInfo("");
+			self.inputValue('');
+			self.wikiInfo('');
 			for (var i = 0; i < placesContainer().length; i++) {
 				placesContainer()[i].titleVisible(true);
 			}
@@ -385,7 +407,7 @@ function myViewModel(){
 	markerSelected.subscribe(function(marker){
 
 		self.hideTitles(marker);
-		if(event.path[0].localName!="span"){
+		if(event.path[0].localName!='span'){
 			self.showWikiInfo(marker);
 		}
 	});
@@ -408,7 +430,7 @@ function myViewModel(){
 			var place = placesContainer()[i];
 
 			if(newValueTrim.length>0){
-				if(place.name.toLowerCase().includes(newValueTrim)===true){
+				if(place.name.toLowerCase().includes(newValueTrim.toLowerCase())===true){
 					place.titleVisible(true);
 					hideOrShowMarker(place.marker, true);
 				}
@@ -441,7 +463,7 @@ function myViewModel(){
 	self.showWikiInfo = function(marker){
 
 		wikiPromise = self.giveWikiInfo(marker.title);
-	    wikiPromise.then(function(data){
+	    wikiPromise.done(function(data){
 
 	    	if(data.query.search.length===0){
 	    		alert("Sorry we couldn't find any Wikipedia Information for the place you are looking for");
@@ -452,7 +474,13 @@ function myViewModel(){
 	    		var wikiUrl = 'https://en.wikipedia.org/wiki/'+marker.title;
 	    		self.url(wikiUrl);
 	    	}
-		});
+		})
+		wikiPromise.fail(function(data){
+
+			alert("Sorry there was an problem with your request: " + data.status + " " + data.statusText)
+
+		})
+
 	};
 
 	/** Handles click event of take me there button.
@@ -461,19 +489,19 @@ function myViewModel(){
 	self.callGoogleDirections = function(){
 
 		self.getGeolocation(showDirections);
-		self.showOrHideLocation("Show my location");
+		self.showOrHideLocation('Show my location');
 		loadingDirections(true);
 	};
 
 	/** Handles click event on showHideLocation button
 	*/
 	self.getUserLocation = function(){
-			if(self.showOrHideLocation()==="Show my location"){
+			if(self.showOrHideLocation()==='Show my location'){
 				loadingCurrentLocation(true);
 				self.getGeolocation(showUserLocation);
 			}
 			else{
-				self.showOrHideLocation("Show my location");
+				self.showOrHideLocation('Show my location');
 				console.log(userMarker);
 				hideOrShowMarker(userMarker, false);
 			}
@@ -482,21 +510,21 @@ function myViewModel(){
 	/** Get user's location*/
 	self.getGeolocation= function(toWhomDeliverData){
 
-		if("geolocation" in navigator){
+		if('geolocation' in navigator){
 			var geo = navigator.geolocation;
 			geo.getCurrentPosition(positionCall, failPosition);
 		}
 		else{
 			loadingDirections(false);
 			loadingCurrentLocation(false)
-			alert("Sorry geolocation is not available");
+			alert('Sorry geolocation is not available');
 		}
 
 		//https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 		function positionCall(data){
 
 			if(loadingDirections() === false){
-				self.showOrHideLocation("Hide my location");
+				self.showOrHideLocation('Hide my location');
 			}
 			toWhomDeliverData(data);
 	      	loadingCurrentLocation(false);
@@ -505,12 +533,17 @@ function myViewModel(){
 		function failPosition(error){
 			loadingDirections(false);
 			loadingCurrentLocation(false)
-			alert("Sorry there was an error:" + error.code + " " + error.message);
+			alert('Sorry there was an error:' + error.code + ' ' + error.message);
 		}
+
+
+
+
+
 	};
 
 
 }
 
-ko.applyBindings(new myViewModel());
+
 

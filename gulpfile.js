@@ -4,7 +4,9 @@ var gulp = require('gulp'),
   cssnano = require('gulp-cssnano'),
 	jshint = require('gulp-jshint'),
   htmlmin = require('gulp-htmlmin'),
-  connect = require('gulp-connect');
+  connect = require('gulp-connect'),
+  browserSync = require('browser-sync').create(),
+  browserify = require('browserify')
 
 gulp.task('htmlmin', function() {
   return gulp.src('*.html')
@@ -38,6 +40,42 @@ gulp.task('jshint', function(){
 gulp.task('connect', function() {
   connect.server();
 });
+
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        server: {
+            baseDir: "./"
+        }
+    });
+});
+
+gulp.task('js', function () {
+    return gulp.src('js/*js')
+        .pipe(browserify())
+        .pipe(uglify())
+        .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('js-watch', ['js'], function (done) {
+    browserSync.reload();
+    done();
+});
+
+gulp.task('serve', ['js'], function () {
+
+    // Serve files from the root of this project
+    browserSync.init({
+        server: {
+            baseDir: "./"
+        }
+    });
+
+    // add browserSync.reload to the tasks array to make
+    // all browsers reload after tasks are complete.
+    gulp.watch("js/*.js", ['js-watch']);
+});
+
+
 
 
 gulp.task('default', ['connect']);
